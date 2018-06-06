@@ -1,0 +1,9 @@
+词法分析错误：
+la_error1.pas --> Line2: Const '3A' is incorrect.
+违背产生式：<无符号数> --> <无符号数><数字> | <数字>
+
+la_error2.pas --> Line18: Illegal charactor ':' found.
+出现无法识别符号':'
+
+la_error3.pas --> Line8: Illegal charactor '.' found.
+出现无法识别符号'.'
