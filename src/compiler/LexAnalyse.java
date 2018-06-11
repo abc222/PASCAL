@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Stack;
 
 import compiler.Word;
@@ -152,7 +153,7 @@ public class LexAnalyse {
 						word.id = Word.key.get(Word.isKey(word.value)).id;
 						word.type = Word.KEY;
 					} else if (isID(word.value)) {//是标识符
-						word.id = 25;
+						word.id = 28;
 						word.type = Word.IDENTIFIER;
 						if(Word.findIdentifierByName(word.value) == 0)
 							Word.addToTable(word.value);
@@ -184,7 +185,7 @@ public class LexAnalyse {
 					}
 					endIndex = index;
 					word = new Word();
-					word.id = 26;
+					word.id = 29;
 					word.value = str.substring(beginIndex, endIndex);
 					if (isInteger(word.value)) {
 						word.type = Word.INT_CONST;
@@ -203,12 +204,12 @@ public class LexAnalyse {
 					if (index < length && str.charAt(index) == '=') {
 						endIndex = index + 1;
 						word = new Word();
-						word.id = 10;
+						word.id = 11;
 						word.value = str.substring(beginIndex, endIndex);
 						word.type = Word.OPERATOR;
 					} else {
 						word = new Word();
-						word.id = 22;
+						word.id = 25;
 						word.value = str.substring(index - 1, index);
 						word.type = Word.OPERATOR;
 						index--;
@@ -219,18 +220,18 @@ public class LexAnalyse {
 					if (index < length && str.charAt(index) == '=') {
 						endIndex = index + 1;
 						word = new Word();
-						word.id = 16;
+						word.id = 19;
 						word.value = str.substring(beginIndex, endIndex);
 						word.type = Word.OPERATOR;
 					} else if (index < length && str.charAt(index) == '>'){
 						word = new Word();
-						word.id = 19;
+						word.id = 22;
 						word.value = str.substring(index - 1, index);
 						word.type = Word.OPERATOR;
 						index--;
 					}else {
 						word = new Word();
-						word.id = 15;
+						word.id = 18;
 						word.value = str.substring(index - 1, index);
 						word.type = Word.OPERATOR;
 						index--;
@@ -241,12 +242,12 @@ public class LexAnalyse {
 					if (index < length && str.charAt(index) == '=') {
 						endIndex = index + 1;
 						word = new Word();
-						word.id = 18;
+						word.id = 21;
 						word.value = str.substring(beginIndex, endIndex);
 						word.type = Word.OPERATOR;
 					} else {
 						word = new Word();
-						word.id = 17;
+						word.id = 20;
 						word.value = str.substring(index - 1, index);
 						word.type = Word.OPERATOR;
 						index--;
@@ -449,8 +450,19 @@ public class LexAnalyse {
 	
 	public static void main(String[] args) throws IOException {//本文件测试用
 		LexAnalyse lex = new LexAnalyse();
-		lex.lexAnalyse1("C:\\Users\\WangYuchao\\Documents\\Tencent Files\\1569433461\\FileRecv\\passed1.c");
-		lex.outputWordList();
+		lex.lexAnalyse1("D:\\gl\\workspace\\PASCAL\\passed1_ns.pas");
+		 Iterator iter = lex.wordList.iterator();
+	        while (iter.hasNext()){
+	        	Word word = (Word)iter.next();
+	            int a = word.id;  
+	            String aStr = String.valueOf(a);  
+//	            char[] arry = aStr.toCharArray();  
+//	            for (int i = 0; i < arry.length; i++) {  
+//	                System.out.print(arry[i]);  
+//	            }  
+	            System.out.println(aStr);
+	        }
+		//lex.outputWordList();
 	}
 
 	public ArrayList<Word> getWordList() {

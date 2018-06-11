@@ -26,30 +26,33 @@ public class Word {
 	public static ArrayList<String> idTable = new ArrayList<String>();// 标识符表
 	
 	static {
-		Word.key.add(new Key("BEGIN",1));
-		Word.key.add(new Key("END",2));
-		Word.key.add(new Key("VAR",3));
-		Word.key.add(new Key("INTEGER",4));
-		Word.key.add(new Key("WHILE",5));
-		Word.key.add(new Key("DO",6));
-		Word.key.add(new Key("IF",7));
-		Word.key.add(new Key("THEN",8));
-		Word.key.add(new Key("ELSE",9));
-		//Word.operator.add(new Operator(':=',10));
-		Word.operator.add(new Operator('+',11));
-		Word.operator.add(new Operator('*',12));
-		Word.operator.add(new Operator('(',13));
-		Word.operator.add(new Operator(')',14));
-		//Word.operator.add(new Operator('<',15));
-		//Word.operator.add(new Operator("<=",16));
-		//Word.operator.add(new Operator('>',17));
-		//Word.operator.add(new Operator(">=",18));
-		//Word.operator.add(new Operator("<>",19));
-		Word.operator.add(new Operator('=',20));
-		Word.boundarySign.add(new BoundarySign('.',21));
-		//Word.boundarySign.add(new BoundarySign(':',22));
-		Word.boundarySign.add(new BoundarySign(';',23));
-		Word.boundarySign.add(new BoundarySign(',',24));
+		Word.key.add(new Key("PROGRAM",1));
+		Word.key.add(new Key("BEGIN",2));
+		Word.key.add(new Key("END",3));
+		Word.key.add(new Key("VAR",4));
+		Word.key.add(new Key("INTEGER",5));
+		Word.key.add(new Key("WHILE",6));
+		Word.key.add(new Key("DO",7));
+		Word.key.add(new Key("IF",8));
+		Word.key.add(new Key("THEN",9));
+		Word.key.add(new Key("ELSE",10));
+		//Word.operator.add(new Operator(':=',11));
+		Word.operator.add(new Operator('+',12));
+		Word.operator.add(new Operator('-',13));
+		Word.operator.add(new Operator('*',14));
+		Word.operator.add(new Operator('/',15));
+		Word.operator.add(new Operator('(',16));
+		Word.operator.add(new Operator(')',17));
+		//Word.operator.add(new Operator('<',18));
+		//Word.operator.add(new Operator("<=",19));
+		//Word.operator.add(new Operator('>',20));
+		//Word.operator.add(new Operator(">=",21));
+		//Word.operator.add(new Operator("<>",22));
+		Word.operator.add(new Operator('=',23));
+		Word.boundarySign.add(new BoundarySign('.',24));
+		//Word.boundarySign.add(new BoundarySign(':',25));
+		Word.boundarySign.add(new BoundarySign(';',26));
+		Word.boundarySign.add(new BoundarySign(',',27));
 	}
 	public int id;// 单词码
 	public String value;// 单词的值
