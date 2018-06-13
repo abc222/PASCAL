@@ -223,13 +223,10 @@ public class Mainform extends JFrame {
 //					LL1Path= parser.outputLL1();
 //					jTextField.setText(readFile(LL1Path));
 //					jTextField.setCaretPosition(jTextField.getText().length());
-//					LexAnalyse.typelist.clear();
 //				} catch (IOException e1) {
 //					// TODO Auto-generated catch block
 //					e1.printStackTrace();
 //				}
-////				InfoFrame inf = new InfoFrame("语法分析", LL1Path);
-////				inf.setVisible(true);
 //			}
 //		});
 //		bt3.addActionListener(new ActionListener() {

@@ -1,5 +1,5 @@
-{Program Passed1;
-Var A,B,B3Y,C12A1,DD : integer;}
+PROGRAM Passed1;
+VAR A,B,B3Y,C12A1,DD : INTEGER;
 BEGIN	
 	 A:= 300;
 	B3Y :=100 ;
