@@ -1,6 +1,17 @@
 package compiler;
 
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,14 +29,23 @@ import util.TextUtil;
  */
 public class Analyzer {
 
-	public Analyzer() {
+	public Analyzer() throws Exception {
 		super();
 		analyzeStatck = new Stack<String>();
 		// 结束符进栈
 		analyzeStatck.push("#");
+		graAnalyzer();
 	}
 
 	private ArrayList<AnalyzeProduce> analyzeProduces;
+	
+	/**
+	 * 成功标志
+	 * 0 为语法分析失败
+	 * 1 为语法分成功
+	 * 2 为词法分析失败
+	 */
+	public int flag = 0;
 
 	/**
 	 * LL（1）文法
@@ -108,8 +128,7 @@ public class Analyzer {
 		System.out.println("开始符:" + startChar);
 		int index = 0;
 		// 开始分析
-		// while (analyzeStatck.peek() != '#' && ss[0] != '#') {
-		while (!analyzeStatck.peek().equals("#")) {
+		while (!analyzeStatck.peek().equals("#") && !str.equals("#") && flag != 2) {
 			index++;
 			String[] ss = str.split(" ");
 			if (!analyzeStatck.peek().equals(ss[0])) {
@@ -121,7 +140,7 @@ public class Analyzer {
 				AnalyzeProduce produce = new AnalyzeProduce();
 				produce.setIndex(index);
 				produce.setAnalyzeStackStr(analyzeStatck.toString());
-				produce.setStr(str);
+				produce.setStr(str.toString());
 				if (null == nowUseExpStr) {
 					produce.setUseExpStr("无法匹配!");
 				} else {
@@ -142,13 +161,13 @@ public class Analyzer {
 			}
 			// 如果可以匹配,分析栈出栈，串去掉一位
 			if (analyzeStatck.peek().equals(ss[0])) {
-				//System.out.println("匹配："+analyzeStatck.peek()+" "+ss[0]);
+				//System.out.println("匹配："+analyzeStatck.peek()+" "+str[0]);
 				System.out.println(index + "\t\t\t" + analyzeStatck.toString() + "\t\t\t" + str + "\t\t\t" + "“"
 						+ ss[0] + "”匹配");
 				AnalyzeProduce produce = new AnalyzeProduce();
 				produce.setIndex(index);
 				produce.setAnalyzeStackStr(analyzeStatck.toString());
-				produce.setStr(str);
+				produce.setStr(str.toString());
 				produce.setUseExpStr("“" + ss[0] + "”匹配");
 				analyzeProduces.add(produce);
 				analyzeStatck.pop();
@@ -157,18 +176,120 @@ public class Analyzer {
 					i++;
 				}				
 				str = str.substring(i+1);
-				continue;
 			}
 		}
-		
-		if(str.equals("#")){
+		if(flag == 2)
+			System.out.println("词法分析失败！");
+		else if(analyzeStatck.peek().equals("#") && str.equals("#")){
 			System.out.println(++index + "\t\t\t" + analyzeStatck.toString() + "\t\t\t" + str + "\t\t\t" 
 					+ "“#”匹配");
-			System.out.println("分析成功！");
+			System.out.println("语法分析成功！");
+			flag = 1;
+		}else{
+			System.out.println("语法分析失败！");
 		}
-		else
-			System.out.println("分析失败！");
 
+	}
+	
+	/**
+	 * 将词法分析产生的二元式文件作为语法分析的输入
+	 * @param filePath
+	 * @throws Exception
+	 */
+	public void gramAnalyse() throws Exception {
+		FileInputStream fis = new FileInputStream("D:\\gl\\workspace\\PASCAL\\result\\wordListForNext.txt");
+		BufferedInputStream bis = new BufferedInputStream(fis);
+		InputStreamReader isr = new InputStreamReader(bis, "utf-8");
+		BufferedReader inbr = new BufferedReader(isr);
+		String st0 = "";
+		st0 = inbr.readLine();
+		if(String.valueOf(st0.charAt(0)).equals("!"))
+			flag = 2;
+		String[] st1 = st0.split(" ");
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0;i < st1.length;i ++){
+			String st2 = st1[i].replace("(","");
+			String[] st3 = st2.split(",");
+			sb.append(st3[0]+" ");	
+		}
+		sb.append("#");
+		str = sb.toString();
+		System.out.println(str);
+		inbr.close();
+	}
+	
+	public void graAnalyzer() throws Exception{
+		//LL（1）文法产生集合
+		ArrayList<String> gsArray = new ArrayList<String>();
+		LL1 gs = new LL1();
+		initLL1(gsArray);
+		gs.setGsArray(gsArray);
+		gs.getNvNt();
+		gs.initExpressionMaps();
+		gs.getFirst();
+		// 设置开始符
+		gs.setS("S");
+		gs.getFollow();
+		//输出查看
+		TreeSet s = gs.getNtSet();
+		TreeSet ss = gs.getNvSet();
+		System.out.print("非终止：");
+		for (Iterator iter = ss.iterator(); iter.hasNext();) {
+			System.out.print(iter.next() + " ");
+		}
+		System.out.println();
+		System.out.print("终止：");
+		for (Iterator iter = s.iterator(); iter.hasNext();) {
+			System.out.print(iter.next() + " ");
+		}
+		System.out.println();
+		// 遍历FITST集合
+		System.out.println("FIRST集合：");
+		gs.getFirst();
+		HashMap m2 = gs.getFirstMap();
+		Iterator iter2 = m2.entrySet().iterator();
+		String key2;
+		while (iter2.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter2.next();
+			// 获取key
+			key2 = (String) entry.getKey();
+			System.out.print(key2 + " :");
+			// 获取value
+			for (Iterator ite = ((TreeSet) entry.getValue()).iterator(); ite.hasNext();) {
+				System.out.print(ite.next() + " ");
+			}
+			System.out.println();
+		}
+
+		// 遍历FELLOW集合
+		System.out.println("FELLOW集合：");
+		gs.getFollow();
+		HashMap m3 = gs.getFollowMap();
+		Iterator iter3 = m3.entrySet().iterator();
+		String key3;
+		while (iter3.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter3.next();
+			// 获取key
+			key3 = (String) entry.getKey();
+			System.out.print(key3 + " :");
+			// 获取value
+			for (Iterator ite = ((TreeSet) entry.getValue()).iterator(); ite.hasNext();) {
+				System.out.print(ite.next() + " ");
+			}
+			System.out.println();
+		}
+		gs.getSelect();
+		// 创建一个分析器
+		// analyzer.setStartChar("E");
+		setStartChar("S");
+		setLl1(gs);
+		System.out.println("分析表：");
+		gs.genAnalyzeTable();
+		System.out.println("输入串：");
+		gramAnalyse();
+		setStr(str);
+		System.out.println("分析过程：");
+		analyze();
 	}
 	
 	
@@ -236,19 +357,20 @@ public class Analyzer {
 		gs.getSelect();
 		// 创建一个分析器
 		Analyzer analyzer = new Analyzer();
-		analyzer.setStartChar("E");
-		//analyzer.setStartChar("S");
+		//analyzer.setStartChar("E");
+		analyzer.setStartChar("S");
 		analyzer.setLl1(gs);
-		analyzer.setStr("i + i * i #");
+		//analyzer.setStr("i + i * i #");
 		//analyzer.setStr("1 28 26 4 28 27 28 25 5 26 2 28 11 29 26 8 28 "
 		//		+ "20 29 9 28 11 29 10 28 11 29 26 3 24 #");
-		//analyzer.setStr("2 6 28 20 29 7 28 11 29 3 #");
+		analyzer.setStr("2 28 11 29 26 8 28 20 29 6 28 18 29 7 28 11 29"
+				+ " 10 28 11 29 3 24 #");
+		//analyzer.setStr(new String[]{"2","28","11","29","26","8","28","20","29","6","28","18",
+		//		"29","7","28","11","29","10","28","11","29","3","24","#"});
 		gs.genAnalyzeTable();
 		analyzer.analyze();
 		System.out.println("");
-		
-		
-		    
+	    analyzer.gramAnalyse();
 	}
 
 	/**
@@ -267,18 +389,18 @@ public class Analyzer {
 //		gsArray.add("C->+ T C");
 //		gsArray.add("C->ε");
 		//测试二
-		gsArray.add("E->T E'");
-		gsArray.add("E'->A T E'");
-		gsArray.add("E'->ε");
-		gsArray.add("T->F T'");  
-		gsArray.add("T'->M F T'");
-		gsArray.add("T'->ε");
-		gsArray.add("F->( E )");
-		gsArray.add("F->i");  
-		gsArray.add("A->+");  
-		gsArray.add("A->-");
-		gsArray.add("M->*");
-		gsArray.add("M->/");
+//		gsArray.add("E->T E'");
+//		gsArray.add("E'->A T E'");
+//		gsArray.add("E'->ε");
+//		gsArray.add("T->F T'");  
+//		gsArray.add("T'->M F T'");
+//		gsArray.add("T'->ε");
+//		gsArray.add("F->( E )");
+//		gsArray.add("F->i");  
+//		gsArray.add("A->+");  
+//		gsArray.add("A->-");
+//		gsArray.add("M->*");
+//		gsArray.add("M->/");
 		
 		//全部产生式，但是太多有错误
 //		gsArray.add("S->1 28 26 A");
@@ -320,30 +442,31 @@ public class Analyzer {
 //		gsArray.add("V->23");
 		
 		//最终使用
-//		gsArray.add("S->2 M 3");
-//		gsArray.add("M->B");
-//		gsArray.add("M->C");
-//		gsArray.add("A->28 11 E");
-//		gsArray.add("B->8 D 9 A 10 A");
-//		gsArray.add("C->6 D 7 A");
-//		gsArray.add("D->E H E");
-//		gsArray.add("E->F E'");
-//		gsArray.add("E'->12 F E'");
-//		gsArray.add("E'->13 F E'");
-//		gsArray.add("E'->ε");
-//		gsArray.add("F->G F'");
-//		gsArray.add("F'->14 G F'");
-//		gsArray.add("F'->15 G F'");
-//		gsArray.add("F'->ε");
-//		gsArray.add("G->28");
-//		gsArray.add("G->29");
-//		gsArray.add("G->16 E 17");
-//		gsArray.add("H->18");
-//		gsArray.add("H->19");
-//		gsArray.add("H->20");
-//		gsArray.add("H->21");
-//		gsArray.add("H->22");
-//		gsArray.add("H->23");
+		gsArray.add("S->2 P 3 24");
+		//gsArray.add("P->A");
+		gsArray.add("P->A 26 B");
+		//gsArray.add("P->C");
+		gsArray.add("A->28 11 E");//赋值语句
+		gsArray.add("B->8 D 9 C 10 A");//if语句
+		gsArray.add("C->6 D 7 A");//while语句
+		gsArray.add("D->E H E");//关系表达式
+		gsArray.add("E->F E'");//算术表达式  消除左递归
+		gsArray.add("E'->12 F E'");
+		gsArray.add("E'->13 F E'");
+		gsArray.add("E'->ε");
+		gsArray.add("F->G F'");//项  消除左递归
+		gsArray.add("F'->14 G F'");
+		gsArray.add("F'->15 G F'");
+		gsArray.add("F'->ε");
+		gsArray.add("G->28");//因式
+		gsArray.add("G->29");
+		gsArray.add("G->16 E 17");
+		gsArray.add("H->18");//关系符
+		gsArray.add("H->19");
+		gsArray.add("H->20");
+		gsArray.add("H->21");
+		gsArray.add("H->22");
+		gsArray.add("H->23");
 	}
 
 }

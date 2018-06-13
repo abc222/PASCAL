@@ -16,6 +16,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 
+import compiler.Analyzer;
 import compiler.LexAnalyse;
 
 //import com.compiler.*;
@@ -26,9 +27,11 @@ public class Mainform extends JFrame {
 	String soursePath;// 源文件路径
 	String LL1Path;
 	String wordListPath;
+	String gramanalyzerPath;
 	String identifierTablePath;
 	String fourElementPath;
 	LexAnalyse lexAnalyse;
+	Analyzer ana;
 	TextArea jTextField;
 	TextArea textArea;
 	//Parser parser;
@@ -205,30 +208,33 @@ public class Mainform extends JFrame {
 				}
 			}
 		});
-//		bt2.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				if(sourseFile.getText().equals("")){
-//					return;
-//				}
-//			lexAnalyse=new LexAnalyse(sourseFile.getText());
-//			parser=new Parser(lexAnalyse);
-//				try {
-//					parser.grammerAnalyse();
-//					if(parser.graErrorFlag){
-//						   int i=parser.errorList.get(0).line;
-//						   seterrorline(i);
-//						}
-//					LL1Path= parser.outputLL1();
-//					jTextField.setText(readFile(LL1Path));
-//					jTextField.setCaretPosition(jTextField.getText().length());
-//				} catch (IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//			}
-//		});
+		bt2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(sourseFile.getText().equals("")){
+					return;
+				}
+				try {
+					lexAnalyse = new LexAnalyse(sourseFile.getText());
+					try {
+						ana = new Analyzer();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					if(ana.flag == 2)
+						jTextField.setText("词法分析失败");
+					else if(ana.flag == 1)
+						jTextField.setText("语法分析成功！");
+					else
+						jTextField.setText("语法分析失败！");
+					jTextField.setCaretPosition(jTextField.getText().length());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 //		bt3.addActionListener(new ActionListener() {
 //
 //			@Override

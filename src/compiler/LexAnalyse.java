@@ -400,12 +400,15 @@ public class LexAnalyse {
 		OutputStreamWriter osw1 = new OutputStreamWriter(bos, "utf-8");
 		PrintWriter pw1 = new PrintWriter(osw1);
 		Word word;
+		if (lexErrorFlag) {
+			pw1.print("!");
+		} 
 		for (int i = 0; i < wordList.size(); i++) {
 			word = wordList.get(i);
 			if(word.type.equals(Word.IDENTIFIER) || word.type.equals(Word.INT_CONST))
-				pw1.print("("+word.id+","+word.value +")  ");
+				pw1.print("("+word.id+","+word.value +") ");
 			else
-				pw1.print("("+word.id+",0)  ");
+				pw1.print("("+word.id+",0) ");
 		}
 		if (lexErrorFlag) {
 			Error error;
@@ -416,8 +419,6 @@ public class LexAnalyse {
 				error = errorList.get(i);
 				pw1.println(error.id+"\t\t"+error.info +"\t"+error.line+"\t\t"+error.word.value);
 			}
-		} else {
-			pw1.println("词法分析通过！");
 		}
 		pw1.close();
 	}
