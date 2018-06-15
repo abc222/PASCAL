@@ -23,11 +23,11 @@ public class LL1 implements Serializable{
 	  
     public LL1() {  
         super();  
-        gsArray = new ArrayList<String>();  
-        nvSet = new TreeSet<String>();  
-        ntSet = new TreeSet<String>();  
-        firstMap = new HashMap<String, TreeSet<String>>();  
-        followMap = new HashMap<String, TreeSet<String>>();  
+        gsArray = new ArrayList<String>();//文法产生式集合 
+        nvSet = new TreeSet<String>(); //开始符集合
+        ntSet = new TreeSet<String>(); //终止符集合
+        firstMap = new HashMap<String, TreeSet<String>>(); //first集合 
+        followMap = new HashMap<String, TreeSet<String>>();//fellow集合
         selectMap = new TreeMap<String, HashMap<String, TreeSet<String>>>();  
     }
     
@@ -301,9 +301,9 @@ public class LL1 implements Serializable{
             //        "---------------find AB:" + itemCharStr + "    " + charItem + "   =First(" + alastChar + ")");  
             TreeSet<String> treeSet = firstMap.get(alastChar);  
             itemSet.addAll(treeSet);  
-            if (treeSet.contains("ε")) {  
-                itemSet.add("#");  
-            }  
+//            if (treeSet.contains("ε")) {  
+//                itemSet.add("#");  
+//            }  
             itemSet.remove("ε");  
             followMap.put(putCharItem, itemSet); 
             

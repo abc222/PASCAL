@@ -128,21 +128,23 @@ public class Analyzer {
 		System.out.println("开始符:" + startChar);
 		int index = 0;
 		// 开始分析
+		String nowUseExpStr = null;
 		while (!analyzeStatck.peek().equals("#") && !str.equals("#") && flag != 2) {
 			index++;
 			String[] ss = str.split(" ");
 			if (!analyzeStatck.peek().equals(ss[0])) {
 				//System.out.println("bu匹配："+analyzeStatck.peek()+" "+ss[0]);
 				// 到分析表中找到这个产生式
-				String nowUseExpStr = TextUtil.findUseExp(ll1.getSelectMap(), analyzeStatck.peek(), ss[0]);
+				nowUseExpStr = TextUtil.findUseExp(ll1.getSelectMap(), analyzeStatck.peek(), ss[0]);
 				System.out.println(index + "\t\t\t" + analyzeStatck.toString() + "\t\t\t" + str + "\t\t\t"
 						+ analyzeStatck.peek() + "->" + nowUseExpStr);
 				AnalyzeProduce produce = new AnalyzeProduce();
 				produce.setIndex(index);
 				produce.setAnalyzeStackStr(analyzeStatck.toString());
 				produce.setStr(str.toString());
-				if (null == nowUseExpStr) {
+				if (nowUseExpStr == null) {
 					produce.setUseExpStr("无法匹配!");
+					break;
 				} else {
 					produce.setUseExpStr(analyzeStatck.peek() + "->" + nowUseExpStr);
 				}
@@ -450,14 +452,16 @@ public class Analyzer {
 		gsArray.add("B->8 D 9 C 10 A");//if语句
 		gsArray.add("C->6 D 7 A");//while语句
 		gsArray.add("D->E H E");//关系表达式
-		gsArray.add("E->F E'");//算术表达式  消除左递归
-		gsArray.add("E'->12 F E'");
-		gsArray.add("E'->13 F E'");
-		gsArray.add("E'->ε");
-		gsArray.add("F->G F'");//项  消除左递归
-		gsArray.add("F'->14 G F'");
-		gsArray.add("F'->15 G F'");
-		gsArray.add("F'->ε");
+		gsArray.add("E->F");
+//		gsArray.add("E->F E'");//算术表达式  消除左递归
+//		gsArray.add("E'->12 F E'");
+//		gsArray.add("E'->13 F E'");
+//		gsArray.add("E'->ε");
+		gsArray.add("F->G");
+//		gsArray.add("F->G F'");//项  消除左递归
+//		gsArray.add("F'->14 G F'");
+//		gsArray.add("F'->15 G F'");
+//		gsArray.add("F'->ε");
 		gsArray.add("G->28");//因式
 		gsArray.add("G->29");
 		gsArray.add("G->16 E 17");
