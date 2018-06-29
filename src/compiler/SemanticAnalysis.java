@@ -105,7 +105,7 @@ public class SemanticAnalysis {
 			}
 		}
 		sem.semanticAnaString.add("$");
-		System.out.println(sem.semanticAnaString);
+		//System.out.println(sem.semanticAnaString);
 		sem.fourElement();
 		System.out.println("四元式结果如下：");
 		System.out.println();
