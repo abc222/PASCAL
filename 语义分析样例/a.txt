@@ -1,0 +1,17 @@
+BEGIN
+   a = 100;
+   IF a>c 
+   {
+      a = c+d;
+      a = b;
+   }
+   ELSE
+   {	
+      a = c;
+   }
+   WHILE a>c
+   {
+      a = c;
+   }
+END.
+$
