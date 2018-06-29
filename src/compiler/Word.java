@@ -42,7 +42,7 @@ public class Word {
 		Word.operator.add(new Operator('*',14));
 		Word.operator.add(new Operator('/',15));
 		Word.operator.add(new Operator('(',16));
-		Word.operator.add(new Operator(')',17));
+		Word.operator.add(new Operator(')',17));	
 		//Word.operator.add(new Operator('<',18));
 		//Word.operator.add(new Operator("<=",19));
 		//Word.operator.add(new Operator('>',20));

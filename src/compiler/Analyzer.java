@@ -19,7 +19,9 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.TreeSet;
 
+
 import data.AnalyzeProduce;
+import data.FourElement;
 import util.TextUtil;
 
 /**
@@ -77,6 +79,11 @@ public class Analyzer {
 	 * 推导所用产生或匹配
 	 */
 	private String useExp;
+	
+	Stack<String>semanticStack=new Stack<String>();//语义栈
+	public ArrayList<FourElement>fourElemList=new ArrayList<FourElement>();//四元式列表
+	String OP=null;
+	String ARG1,ARG2,RES;
 
 	public ArrayList<AnalyzeProduce> getAnalyzeProduces() {
 		return analyzeProduces;

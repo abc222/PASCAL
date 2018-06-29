@@ -1,7 +1,11 @@
 package compiler;
 
 import java.util.Stack;
-
+/**
+ * 这是LL1入门练习类，与本课程设计实际无关
+ * @author WangYuchao
+ *
+ */
 
 public class LL1test {
 	
