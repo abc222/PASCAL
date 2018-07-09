@@ -241,7 +241,8 @@ public class SemanticAnalysis {
 				i++;
 		}
 	}
-
+	
+	
 	public boolean jump(int j) {
 		int i;
 		for (i = 0; i <= sign - 1; i++) {
@@ -250,4 +251,5 @@ public class SemanticAnalysis {
 		}
 		return false;
 	}
+	
 }

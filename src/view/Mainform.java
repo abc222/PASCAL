@@ -182,7 +182,6 @@ public class Mainform extends JFrame {
 		JButton bt1 = new JButton("词法分析");
 		JButton bt2 = new JButton("语法分析");
 		JButton bt3 = new JButton("语义分析");
-		JButton bt4 = new JButton("目标代码生成");
 		bt1.addActionListener(new ActionListener() {
 
 			@Override
@@ -258,52 +257,9 @@ public class Mainform extends JFrame {
 //				
 //			}
 //		});
-//		bt4.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//
-//
-//
-//				
-//				//获取标识符
-//				lexAnalyse = new LexAnalyse(sourseFile.getText());
-//				ArrayList<Word> wordList;
-//				wordList = lexAnalyse.getWordList();
-//				ArrayList<String> id = new ArrayList<String>();
-//				for (int i = 0; i < wordList.size(); i++) {
-//					if(wordList.get(i).type.equals(Word.IDENTIFIER)){					
-//					if(!id.contains(wordList.get(i).value)){
-//					id.add(wordList.get(i).value);
-//					System.out.println(wordList.get(i).value);
-//					}
-//					}
-//				}
-//
-////				FourElement temp;
-////				for (int i = 0; i < parser.fourElemList.size(); i++) {
-////					temp = parser.fourElemList.get(i);
-////					System.out.println( temp.id + "(" + temp.op + "," + temp.arg1 + "," + temp.arg2 + "," + temp.result + ")");
-////				}
-//				
-//				parser = new Parser(lexAnalyse);
-//				parser.grammerAnalyse();
-//				Asm asm = new Asm(parser.fourElemList, id, parser.fourElemT);			
-//				 
-//				try {
-//					jTextField.setText(readFile(asm.getAsmFile()));
-//					jTextField.setCaretPosition(jTextField.getText().length());
-//				} catch (IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//				
-//			}
-//		});
 		p.add(bt1);
 		p.add(bt2);
 		p.add(bt3);
-		p.add(bt4);
 		return p;
 	}
 
